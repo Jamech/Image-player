@@ -1,10 +1,7 @@
-import { StyleSheet, Text, View,Button, SafeAreaView } from 'react-native'
-import React from 'react'
-import { useState,useEffect } from 'react';
-import { Image } from 'react-native';
-import { StatusBar } from 'react-native';
-import { Platform } from 'react-native';
+import { StyleSheet, Text, View, Button, SafeAreaView, Image, StatusBar, Platform, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
 
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const Home = () => {
 
@@ -61,11 +58,11 @@ const Home = () => {
       <View>
         <Image
             source={images[currentIndex]}
-            style={{ width: '100%', height: 300, resizeMode: 'contain' }}
+            style={styles.image}
         />
       </View>
 
-        <View style={{ marginTop: 20 }}>
+        <View style={styles.btn}>
           <Button title={shuffle ? "Shuffle ON" : "Shuffle OFF"} onPress={() => setShuffle(!shuffle)} />
           <View style={{ height: 10 }} />
           <Button title={repeat ? "Repeat ON" : "Repeat OFF"} onPress={() => setRepeat(!repeat)} />
@@ -81,9 +78,13 @@ export default Home
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      justifyContent: 'center',
-      alignContent: 'center',
+      justifyContent: 'space-between',
       backgroundColor: '#000',
       paddingTop: 30,
-    }
+    },
+    image: {
+      width: '100%',
+      height: screenHeight * 0.85,
+      resizeMode: 'cover',
+    },
 })
