@@ -1,7 +1,10 @@
-import { StyleSheet, Text, View,Button } from 'react-native'
+import { StyleSheet, Text, View,Button, SafeAreaView } from 'react-native'
 import React from 'react'
 import { useState,useEffect } from 'react';
-import { Image } from 'react-native'; // Ensure you have expo-image installed
+import { Image } from 'react-native';
+import { StatusBar } from 'react-native';
+import { Platform } from 'react-native';
+
 
 const Home = () => {
 
@@ -46,25 +49,39 @@ const Home = () => {
         }, 3000); // Change image every 3 seconds
         return () => clearInterval(interval);
         }
-    }, [playing, currentIndex, shuffle, repeat]);
+    }, [playing, shuffle, repeat]);
 
   return (
-    <View style={styles.container}>
+
+    <SafeAreaView style={styles.container}>
+        <StatusBar
+        backgroundColor={Platform.OS === 'android' ? '#000' : undefined}
+        barStyle="light-content"
+      />
+      <View>
         <Image
             source={images[currentIndex]}
             style={{ width: '100%', height: 300, resizeMode: 'contain' }}
         />
 
-        <Button title={shuffle ? "Shuffle ON" : "Shuffle OFF"} onPress={() => setShuffle(!shuffle)} />
-        <Button title={repeat ? "Repeat ON" : "Repeat OFF"} onPress={() => setRepeat(!repeat)} />
-        <Button title={playing ? "Pause" : "Play"} onPress={() => setPlaying(!playing)} />
-
-    </View>
+        <View style={{ marginTop: 20, alignItems: 'center' }}>
+          <Button title={shuffle ? "Shuffle ON" : "Shuffle OFF"} onPress={() => setShuffle(!shuffle)} />
+          <View style={{ height: 10 }} />
+          <Button title={repeat ? "Repeat ON" : "Repeat OFF"} onPress={() => setRepeat(!repeat)} />
+          <View style={{ height: 10 }} />
+          <Button title={playing ? "Pause" : "Play"} onPress={() => setPlaying(!playing)} />
+</View>
+      </View>
+    </SafeAreaView>
   )
 }
 
 export default Home
 
 const styles = StyleSheet.create({
-  
+    container: {
+      flex: 1,
+      backgroundColor: '#000',
+      paddingTop: 30,
+    }
 })
