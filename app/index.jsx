@@ -63,14 +63,14 @@ const Home = () => {
             source={images[currentIndex]}
             style={{ width: '100%', height: 300, resizeMode: 'contain' }}
         />
+      </View>
 
-        <View style={{ marginTop: 20, alignItems: 'center' }}>
+        <View style={{ marginTop: 20 }}>
           <Button title={shuffle ? "Shuffle ON" : "Shuffle OFF"} onPress={() => setShuffle(!shuffle)} />
           <View style={{ height: 10 }} />
           <Button title={repeat ? "Repeat ON" : "Repeat OFF"} onPress={() => setRepeat(!repeat)} />
           <View style={{ height: 10 }} />
           <Button title={playing ? "Pause" : "Play"} onPress={() => setPlaying(!playing)} />
-</View>
       </View>
     </SafeAreaView>
   )
@@ -81,6 +81,8 @@ export default Home
 const styles = StyleSheet.create({
     container: {
       flex: 1,
+      justifyContent: 'center',
+      alignContent: 'center',
       backgroundColor: '#000',
       paddingTop: 30,
     }
