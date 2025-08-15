@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View, Button, SafeAreaView, Image, StatusBar, Platform, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Button, SafeAreaView, Image, StatusBar, Platform, Dimensions, Animated } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import ControlButton from './components/ControlButton';
+import { useRef } from 'react';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -19,35 +20,56 @@ const Home = () => {
   const [repeat, setRepeat] = useState(false);
   const [playing, setPlaying] = useState(true);
 
-  const showNextImage = () => {
-  setCurrentIndex((prevIndex) => {
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+
+  const getNextIndex = (prevIndex) => {
     if (shuffle) {
-      // Pick a random image index that’s different from the current one
       let randomIndex;
       do {
         randomIndex = Math.floor(Math.random() * images.length);
       } while (randomIndex === prevIndex && images.length > 1);
       return randomIndex;
     } else {
-      // Go to next image in sequence
       const nextIndex = prevIndex + 1;
       if (nextIndex >= images.length) {
-        // End of images
-        return repeat ? 0 : prevIndex; // Loop if repeat is ON, else stay on last
+        return repeat ? 0 : prevIndex;
       } else {
         return nextIndex;
       }
     }
-  });
-};
-    useEffect(() => {
-        if (playing) {
-        const interval = setInterval(() => {
-            showNextImage();
-        }, 3000); // Change image every 3 seconds
-        return () => clearInterval(interval);
-        }
-    }, [playing, shuffle, repeat]);
+  };
+
+  const showNextImage = () => {
+    setCurrentIndex((prevIndex) => {
+      const nextIndex = getNextIndex(prevIndex);
+
+      // Skip animation if same image
+      if (nextIndex === prevIndex) return prevIndex;
+
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }).start(() => {
+        setCurrentIndex(nextIndex);
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }).start();
+      });
+
+      return prevIndex; // Keep same index until animation completes
+    });
+  };
+
+  useEffect(() => {
+    if (playing) {
+      const interval = setInterval(showNextImage, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [playing, shuffle, repeat]);
+  
 
   return (
 
@@ -57,9 +79,9 @@ const Home = () => {
         barStyle="light-content"
       />
       <View>
-        <Image
+        <Animated.Image
             source={images[currentIndex]}
-            style={styles.image}
+            style={[styles.image, { opacity: fadeAnim }]}
         />
       </View>
 
