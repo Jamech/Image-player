@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, Button, SafeAreaView, Image, StatusBar, Platform, Dimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import ControlButton from './components/ControlButton';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -63,12 +64,22 @@ const Home = () => {
       </View>
 
         <View style={styles.btn}>
-          <Button title={shuffle ? "Shuffle ON" : "Shuffle OFF"} onPress={() => setShuffle(!shuffle)} />
-          <View style={{ height: 10 }} />
-          <Button title={repeat ? "Repeat ON" : "Repeat OFF"} onPress={() => setRepeat(!repeat)} />
-          <View style={{ height: 10 }} />
-          <Button title={playing ? "Pause" : "Play"} onPress={() => setPlaying(!playing)} />
-      </View>
+  <ControlButton
+    title={shuffle ? "Shuffle ON" : "Shuffle OFF"}
+    onPress={() => setShuffle(!shuffle)}
+    color={shuffle ? '#FF9800' : '#555'}
+  />
+  <ControlButton
+    title={repeat ? "Repeat ON" : "Repeat OFF"}
+    onPress={() => setRepeat(!repeat)}
+    color={repeat ? '#2196F3' : '#555'}
+  />
+  <ControlButton
+    title={playing ? "Pause" : "Play"}
+    onPress={() => setPlaying(!playing)}
+    color={playing ? '#4CAF50' : '#F44336'}
+  />
+</View>
     </SafeAreaView>
   )
 }
@@ -84,7 +95,7 @@ const styles = StyleSheet.create({
     },
     image: {
       width: '100%',
-      height: screenHeight * 0.85,
-      resizeMode: 'cover',
+      height: screenHeight * 0.80,
+      resizeMode: 'contain',
     },
 })
